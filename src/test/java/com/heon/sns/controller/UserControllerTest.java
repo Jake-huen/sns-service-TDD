@@ -39,7 +39,7 @@ public class UserControllerTest {
         String userName = "userName";
         String passwrod = "password";
 
-        when(userService.join()).thenReturn(mock(User.class));
+        when(userService.join(userName, passwrod)).thenReturn(mock(User.class));
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -54,7 +54,7 @@ public class UserControllerTest {
         String userName = "userName";
         String passwrod = "password";
 
-        when(userService.join()).thenThrow(new SnsApplicationException());
+        when(userService.join(userName, passwrod)).thenThrow(new SnsApplicationException());
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -67,14 +67,14 @@ public class UserControllerTest {
     @Test
     public void 로그인() throws Exception {
         String userName = "userName";
-        String passwrod = "password";
+        String password = "password";
 
-        when(userService.login()).thenReturn("test_token");
+        when(userService.login(userName, password)).thenReturn("test_token");
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         // TODO : add request Body
-                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, passwrod)))
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
@@ -82,14 +82,14 @@ public class UserControllerTest {
     @Test
     public void 로그인시_회원가입이_안된_userName을_입력할경우_에러반환() throws Exception {
         String userName = "userName";
-        String passwrod = "password";
+        String password = "password";
 
-        when(userService.login()).thenThrow(new SnsApplicationException());
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException());
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         // TODO : add request Body
-                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, passwrod)))
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -97,14 +97,14 @@ public class UserControllerTest {
     @Test
     public void 로그인시_틀린_password_입력할경우_에러반환() throws Exception {
         String userName = "userName";
-        String passwrod = "password";
+        String password = "password";
 
-        when(userService.login()).thenThrow(new SnsApplicationException());
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException());
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         // TODO : add request Body
-                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, passwrod)))
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isUnauthorized());
     }
