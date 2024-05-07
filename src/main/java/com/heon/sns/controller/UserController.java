@@ -1,8 +1,10 @@
 package com.heon.sns.controller;
 
 import com.heon.sns.controller.request.UserJoinRequest;
+import com.heon.sns.controller.request.UserLoginRequest;
 import com.heon.sns.controller.response.Response;
 import com.heon.sns.controller.response.UserJoinResponse;
+import com.heon.sns.controller.response.UserLoginResponse;
 import com.heon.sns.model.User;
 import com.heon.sns.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Response<?> login() {
-        return null;
+    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
+        String token = userService.login(request.getUserName(), request.getPassword());
+        return Response.success(new UserLoginResponse(token));
     }
 }
