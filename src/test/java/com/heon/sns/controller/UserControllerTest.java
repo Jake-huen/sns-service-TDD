@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heon.sns.controller.request.UserJoinRequest;
 import com.heon.sns.controller.request.UserLoginRequest;
+import com.heon.sns.exception.ErrorCode;
 import com.heon.sns.exception.SnsApplicationException;
 import com.heon.sns.model.User;
 import com.heon.sns.service.UserService;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureWebMvc
 public class UserControllerTest {
 
-    @Autowired
+    @MockBean
     private MockMvc mockMvc;
 
     @Autowired
@@ -54,7 +55,7 @@ public class UserControllerTest {
         String userName = "userName";
         String passwrod = "password";
 
-        when(userService.join(userName, passwrod)).thenThrow(new SnsApplicationException());
+        when(userService.join(userName, passwrod)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -84,7 +85,7 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName, password)).thenThrow(new SnsApplicationException());
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -99,7 +100,7 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName, password)).thenThrow(new SnsApplicationException());
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
