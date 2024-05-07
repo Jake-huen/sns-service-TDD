@@ -7,6 +7,7 @@ import com.heon.sns.model.entity.UserEntity;
 import com.heon.sns.repository.UserEntityRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserEntityRepository userEntityRepository;
+    private final BCryptPasswordEncoder encoder;
 
     public User join(String userName, String password) {
         // 회원가입하려는 userName으로 회원가입된 user가 있는지
@@ -24,7 +26,7 @@ public class UserService {
         });
 
         // 회원가입 진행 = user를 등록
-        UserEntity userEntity = userEntityRepository.save(UserEntity.of(userName, password));
+        UserEntity userEntity = userEntityRepository.save(UserEntity.of(userName, encoder.encode(password)));
 
         return User.fromEntity(userEntity);
     }
