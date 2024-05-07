@@ -5,16 +5,17 @@ import com.heon.sns.exception.SnsApplicationException;
 import com.heon.sns.model.User;
 import com.heon.sns.model.entity.UserEntity;
 import com.heon.sns.repository.UserEntityRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserService {
 
-    private final UserEntityRepository userEntityRepository;
+    private UserEntityRepository userEntityRepository;
 
     public User join(String userName, String password) {
         // 회원가입하려는 userName으로 회원가입된 user가 있는지
