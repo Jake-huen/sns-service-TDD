@@ -5,8 +5,10 @@ import com.heon.sns.exception.SnsApplicationException;
 import com.heon.sns.model.User;
 import com.heon.sns.model.entity.UserEntity;
 import com.heon.sns.repository.UserEntityRepository;
+import com.heon.sns.util.JwtTokenUtils;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
+    @Value("${jwt.secret-key}")
+    private String secretKey;
+
+    @Value("${jwt.token.expired-time-ms}")
+    private Long expiredTimeMs;
 
     private final UserEntityRepository userEntityRepository;
     private final BCryptPasswordEncoder encoder;
@@ -40,7 +48,8 @@ public class UserService {
             throw new SnsApplicationException(ErrorCode.INCORRECT_PASSWORD);
         }
         // 토큰 생성
+        String token = JwtTokenUtils.generateToken(userName, secretKey, expiredTimeMs);
 
-        return "";
+        return token;
     }
 }

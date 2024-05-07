@@ -15,3 +15,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+
+jwt:
+  secret-key: sns_application_secret_key_rlaxogjs
+  token:
+    expired-time-ms: 25920000000
