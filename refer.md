@@ -28,3 +28,9 @@ Mocking된 userEntity를 가지고 비교하는 로직을 구현해도 괜찮지
 userEntity에 있는 패스워드랑 실제 입력받은 패스원드 비교하는게 더 쉽도록 코드 구현할 수 있다.
 
 -> 가짜 테스트용 userEntity
+
+# Spring 3에서는 SpringSecurity 6 사용
+
+- `authorizeHttpRequests()` 존재하지 않음
+- `csrf()` 존재하지 않음
+- 
