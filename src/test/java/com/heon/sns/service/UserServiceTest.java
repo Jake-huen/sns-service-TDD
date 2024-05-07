@@ -1,9 +1,11 @@
 package com.heon.sns.service;
 
+import com.heon.sns.exception.ErrorCode;
 import com.heon.sns.exception.SnsApplicationException;
 import com.heon.sns.fixture.UserEntityFixture;
 import com.heon.sns.model.entity.UserEntity;
 import com.heon.sns.repository.UserEntityRepository;
+import org.assertj.core.api.AbstractThrowableAssert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,7 +40,7 @@ public class UserServiceTest {
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty());
         // when(userEntityRepository.save(any())).thenReturn(Optional.of(mock(UserEntity.class)));
-        when(userEntityRepository.save(any())).thenReturn(Optional.of(UserEntityFixture.get(userName, password)));
+        when(userEntityRepository.save(any())).thenReturn(UserEntityFixture.get(userName, password));
         when(encoder.encode(password)).thenReturn("encrypt_password");
 
         assertThatCode(() -> userService.join(userName, password)).doesNotThrowAnyException();
@@ -71,6 +73,8 @@ public class UserServiceTest {
 
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
+        when(encoder.matches(password, fixture.getPassword())).thenReturn(true);
+
         assertThatCode(() -> userService.login(userName, password)).doesNotThrowAnyException();
     }
 
@@ -84,7 +88,9 @@ public class UserServiceTest {
         when(userEntityRepository.save(any())).thenReturn(Optional.of(mock(UserEntity.class)));
 
         assertThatThrownBy(() -> userService.login(userName, password))
-                .isInstanceOf(SnsApplicationException.class);
+                .isInstanceOf(SnsApplicationException.class)
+                .extracting("errorCode")
+                .isEqualTo(ErrorCode.USER_NOT_FOUND);
     }
 
     @Test
@@ -99,7 +105,9 @@ public class UserServiceTest {
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
 
         assertThatThrownBy(() -> userService.login(userName, wrongPassword))
-                .isInstanceOf(SnsApplicationException.class);
+                .isInstanceOf(SnsApplicationException.class)
+                .extracting("errorCode")
+                .isEqualTo(ErrorCode.INCORRECT_PASSWORD);
     }
 
 }
