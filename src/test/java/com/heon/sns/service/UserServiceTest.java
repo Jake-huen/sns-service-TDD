@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
@@ -26,6 +27,9 @@ public class UserServiceTest {
     @MockBean
     private UserEntityRepository userEntityRepository;
 
+    @MockBean
+    private BCryptPasswordEncoder encoder;
+
     @Test
     void 회원가입이_정상적으로_동작하는_경우() {
         String userName = "userName";
@@ -35,6 +39,7 @@ public class UserServiceTest {
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty());
         // when(userEntityRepository.save(any())).thenReturn(Optional.of(mock(UserEntity.class)));
         when(userEntityRepository.save(any())).thenReturn(Optional.of(UserEntityFixture.get(userName, password)));
+        when(encoder.encode(password)).thenReturn("encrypt_password");
 
         assertThatCode(() -> userService.join(userName, password)).doesNotThrowAnyException();
     }
@@ -50,6 +55,7 @@ public class UserServiceTest {
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
         // when(userEntityRepository.save(any())).thenReturn(Optional.of(mock(UserEntity.class)));
         when(userEntityRepository.save(any())).thenReturn(Optional.of(fixture));
+        when(encoder.encode(password)).thenReturn("encrypt_password");
 
 
         assertThatThrownBy(() -> userService.join(userName, password))
