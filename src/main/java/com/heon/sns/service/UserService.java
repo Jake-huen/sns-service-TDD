@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
-    private UserEntityRepository userEntityRepository;
+    private final UserEntityRepository userEntityRepository;
 
     public User join(String userName, String password) {
         // 회원가입하려는 userName으로 회원가입된 user가 있는지

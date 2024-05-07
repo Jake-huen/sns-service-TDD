@@ -24,4 +24,9 @@ public class UserController {
         UserJoinResponse response = UserJoinResponse.fromUser(user);
         return Response.success(response);
     }
+
+    @PostMapping("/login")
+    public Response<?> login() {
+        return null;
+    }
 }
