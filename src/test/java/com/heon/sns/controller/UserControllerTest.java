@@ -60,7 +60,6 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
-                        // TODO : add request Body
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, passwrod)))
                 ).andDo(print())
                 .andExpect(status().isConflict());
@@ -75,7 +74,6 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        // TODO : add request Body
                         .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isOk());
@@ -90,7 +88,6 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        // TODO : add request Body
                         .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isNotFound());
@@ -105,7 +102,6 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        // TODO : add request Body
                         .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isUnauthorized());

@@ -29,8 +29,37 @@ userEntity에 있는 패스워드랑 실제 입력받은 패스원드 비교하�
 
 -> 가짜 테스트용 userEntity
 
-# Spring 3에서는 SpringSecurity 6 사용
+## Spring 3에서는 SpringSecurity 6 사용
 
 - `authorizeHttpRequests()` 존재하지 않음
 - `csrf()` 존재하지 않음
-- 
+```java
+@Configuration
+@EnableWebSecurity
+public class AuthenticationConfig {
+
+    @Bean
+    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.authorizeHttpRequests((auth) -> auth
+                .requestMatchers("/api/*/users/join", "/api/*/users/login").permitAll()
+                .requestMatchers("/api/**").authenticated()
+        )
+            .sessionManagement((session) -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        // TODO : Security EntryPoint
+//                .exceptionHandling((exception) -> exception
+//                        .authenticationEntryPoint());
+return http.build();
+}
+}
+```
+
+## @WithAnonymousUser, @WithMockUser 어노테이션
+
+- 스프링 시큐리티에서 제공하는 어노테이션 중 하나
+- 테스트 메서드에서 익명 사용자로 테스트를 수행하는데 사용
+
+## (columnDefinition = "TEXT") 
+
+- Entity를 작성할 때, @Column의 속성값으로 (columnDefinition = "TEXT")를 사용하면 String으로 사용할 때의 길이보다 더 긴 내용을 사용할 수 있다.

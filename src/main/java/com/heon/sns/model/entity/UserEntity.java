@@ -14,8 +14,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table
-@SQLDelete(sql = "UPDATED user SET deleted_at = NOW() where id=?")
-public class UserEntity {
+public class UserEntity extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,25 +28,6 @@ public class UserEntity {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
-
-    @Column(name = "registered_at")
-    private Timestamp registeredAt;
-
-    @Column(name = "updated_at")
-    private Timestamp updatedAt;
-
-    @Column(name = "deleted_at")
-    private Timestamp deletedAt;
-
-    @PrePersist
-    void registeredAt() {
-        this.registeredAt = Timestamp.from(Instant.now());
-    }
-
-    @PreUpdate
-    void updatedAt() {
-        this.updatedAt = Timestamp.from(Instant.now());
-    }
 
     public static UserEntity of(String userName, String password) {
         UserEntity userEntity = new UserEntity();

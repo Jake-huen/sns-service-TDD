@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
@@ -14,9 +15,8 @@ public class User {
     private String userName;
     private String password;
     private UserRole userRole;
-    private Timestamp registeredAt;
-    private Timestamp updatedAt;
-    private Timestamp deletedAt;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 
     public static User fromEntity(UserEntity entity) {
         return new User(
@@ -24,9 +24,8 @@ public class User {
                 entity.getUserName(),
                 entity.getPassword(),
                 entity.getRole(),
-                entity.getRegisteredAt(),
-                entity.getUpdatedAt(),
-                entity.getDeletedAt()
+                entity.getCreatedDate(),
+                entity.getModifiedDate()
         );
     }
 }

@@ -61,7 +61,8 @@ public class UserServiceTest {
 
 
         assertThatThrownBy(() -> userService.join(userName, password))
-                .isInstanceOf(SnsApplicationException.class);
+                .isInstanceOf(SnsApplicationException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATED_USER_NAME);
     }
 
     @Test
@@ -89,8 +90,7 @@ public class UserServiceTest {
 
         assertThatThrownBy(() -> userService.login(userName, password))
                 .isInstanceOf(SnsApplicationException.class)
-                .extracting("errorCode")
-                .isEqualTo(ErrorCode.USER_NOT_FOUND);
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
     }
 
     @Test
@@ -106,8 +106,7 @@ public class UserServiceTest {
 
         assertThatThrownBy(() -> userService.login(userName, wrongPassword))
                 .isInstanceOf(SnsApplicationException.class)
-                .extracting("errorCode")
-                .isEqualTo(ErrorCode.INCORRECT_PASSWORD);
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INCORRECT_PASSWORD);
     }
 
 }
