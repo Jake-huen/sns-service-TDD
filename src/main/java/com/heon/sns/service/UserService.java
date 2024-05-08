@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -27,6 +28,13 @@ public class UserService {
     private final UserEntityRepository userEntityRepository;
     private final BCryptPasswordEncoder encoder;
 
+    // UserDetailService 인터페이스를 상속받지 않고 직접 구현
+    public User loadUserByUserName(String userName) {
+        return userEntityRepository.findByUserName(userName).map(User::fromEntity).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
+    }
+
+    @Transactional
     public User join(String userName, String password) {
         // 회원가입하려는 userName으로 회원가입된 user가 있는지
         userEntityRepository.findByUserName(userName).ifPresent(it -> {
