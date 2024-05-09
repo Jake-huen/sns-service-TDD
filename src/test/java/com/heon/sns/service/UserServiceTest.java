@@ -5,7 +5,6 @@ import com.heon.sns.exception.SnsApplicationException;
 import com.heon.sns.fixture.UserEntityFixture;
 import com.heon.sns.model.entity.UserEntity;
 import com.heon.sns.repository.UserEntityRepository;
-import org.assertj.core.api.AbstractThrowableAssert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

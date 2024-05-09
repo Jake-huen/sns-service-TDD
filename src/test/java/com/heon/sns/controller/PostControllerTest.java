@@ -3,9 +3,12 @@ package com.heon.sns.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heon.sns.controller.request.PostCreateRequest;
+import com.heon.sns.service.PostService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -16,16 +19,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RestController
+@SpringBootTest
 @AutoConfigureMockMvc
 public class PostControllerTest {
-
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private PostService postService;
 
     @Test
     @WithMockUser
@@ -34,7 +39,7 @@ public class PostControllerTest {
         String title = "title";
         String body = "body";
 
-        mockMvc.perform(post("/api/v1'/posts")
+        mockMvc.perform(post("/api/v1/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new PostCreateRequest(title, body)))
                 ).andDo(print())
@@ -50,7 +55,7 @@ public class PostControllerTest {
 
         // 로그인하지 않은 경우
 
-        mockMvc.perform(post("/api/v1'/posts")
+        mockMvc.perform(post("/api/v1/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new PostCreateRequest(title, body)))
                 ).andDo(print())
