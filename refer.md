@@ -63,3 +63,11 @@ return http.build();
 ## (columnDefinition = "TEXT") 
 
 - Entity를 작성할 때, @Column의 속성값으로 (columnDefinition = "TEXT")를 사용하면 String으로 사용할 때의 길이보다 더 긴 내용을 사용할 수 있다.
+
+
+## doThrow(new SnsApplicationException(ErrorCode.INVALID_PERMISSION)).when(postService).modify(title, body, any(), eq(1));
+
+- 특정 오류를 발생시키고 싶을때 사용
+- `any()`, `eq(1)` 사용
+  - `eq(1)` 메서드는 Mockito의 매치어 중 하나로, 인자로 전달된 값을 비교할 때 사용함. 주로 메서드 호출 시 인자로 전달되는 값이 일치하는지 확인하기 위해 사용.
+    -   eq(1)은 인자가 1과 일치하는지를 확인하기 위한 매치어
