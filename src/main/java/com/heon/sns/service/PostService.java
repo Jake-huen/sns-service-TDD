@@ -3,6 +3,7 @@ package com.heon.sns.service;
 
 import com.heon.sns.exception.ErrorCode;
 import com.heon.sns.exception.SnsApplicationException;
+import com.heon.sns.model.Post;
 import com.heon.sns.model.entity.PostEntity;
 import com.heon.sns.model.entity.UserEntity;
 import com.heon.sns.repository.PostEntityRepository;
@@ -10,6 +11,8 @@ import com.heon.sns.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,14 +32,20 @@ public class PostService {
     }
 
     @Transactional
-    public void modify(String title, String body, String userName, Integer postId) {
+    public Post modify(String title, String body, String userName, Integer postId) {
         UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
-
         // post exist
-
-
+        PostEntity postEntity = postEntityRepository.findById(postId).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.POST_NOT_FOUND, String.format("%s not founded", postId)));
         // post permission
+        if (postEntity.getUser() != userEntity) {
+            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", userName, postId));
+        }
 
+        postEntity.setTitle(title);
+        postEntity.setBody(body);
+
+        return Post.fromEntity(postEntityRepository.save(postEntity));
     }
 }
