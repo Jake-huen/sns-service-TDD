@@ -4,6 +4,7 @@ import com.heon.sns.model.UserRole;
 import jakarta.annotation.PreDestroy;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 

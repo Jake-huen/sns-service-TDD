@@ -2,6 +2,7 @@ package com.heon.sns.controller;
 
 import com.heon.sns.controller.request.PostCreateRequest;
 import com.heon.sns.controller.request.PostModifyRequest;
+import com.heon.sns.controller.response.PostResponse;
 import com.heon.sns.controller.response.Response;
 import com.heon.sns.model.Post;
 import com.heon.sns.service.PostService;
@@ -23,9 +24,9 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public Response<Void> modify(@PathVariable Integer postId, @RequestBody PostModifyRequest request, Authentication authentication) {
+    public Response<PostResponse> modify(@PathVariable("postId") Integer postId, @RequestBody PostModifyRequest request, Authentication authentication) {
         Post post = postService.modify(request.getTitle(), request.getBody(), authentication.getName(), postId);
-        return Response.success();
+        return Response.success(PostResponse.fromPost(post));
     }
 
 }

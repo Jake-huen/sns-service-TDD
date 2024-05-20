@@ -1,7 +1,6 @@
 package com.heon.sns.model;
 
 import com.heon.sns.model.entity.PostEntity;
-import com.heon.sns.model.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -1,7 +1,6 @@
 package com.heon.sns.controller.response;
 
 import com.heon.sns.model.Post;
-import com.heon.sns.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

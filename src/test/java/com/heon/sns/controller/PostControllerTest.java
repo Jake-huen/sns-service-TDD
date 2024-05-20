@@ -6,6 +6,9 @@ import com.heon.sns.controller.request.PostCreateRequest;
 import com.heon.sns.controller.request.PostModifyRequest;
 import com.heon.sns.exception.ErrorCode;
 import com.heon.sns.exception.SnsApplicationException;
+import com.heon.sns.fixture.PostEntityFixture;
+import com.heon.sns.model.Post;
+import com.heon.sns.model.entity.PostEntity;
 import com.heon.sns.service.PostService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +79,9 @@ public class PostControllerTest {
         String title = "title";
         String body = "body";
 
+        when(postService.modify(eq(title), eq(body), any(), any()))
+                .thenReturn(Post.fromEntity(PostEntityFixture.get("userName", 1, 1)));
+
         mockMvc.perform(put("/api/v1/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
@@ -118,7 +124,7 @@ public class PostControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
+    @WithMockUser
     void 포스트수정시_수정하려는_글이_없는경우_에러발생() throws Exception {
 
         String title = "title";

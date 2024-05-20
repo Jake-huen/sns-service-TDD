@@ -78,6 +78,7 @@ public class PostServiceTest {
 
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(userEntity));
         when(postEntityRepository.findById(postId)).thenReturn(Optional.of(postEntity));
+        when(postEntityRepository.save(any())).thenReturn(postEntity);
 
         assertThatCode(() -> postService.modify(title, body, userName, postId))
                 .doesNotThrowAnyException();
@@ -109,7 +110,7 @@ public class PostServiceTest {
         Integer postId = 1;
 
         PostEntity postEntity = PostEntityFixture.get(userName, postId, 1);
-        UserEntity writer = UserEntityFixture.get("otherUser", "password", 1);
+        UserEntity writer = UserEntityFixture.get("otherUser", "password", 2);
 
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(writer));
         when(postEntityRepository.findById(postId)).thenReturn(Optional.of(postEntity));
