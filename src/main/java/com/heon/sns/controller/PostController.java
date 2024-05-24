@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
+
 @RestController
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
@@ -35,4 +37,8 @@ public class PostController {
         return Response.success();
     }
 
+    @GetMapping
+    public Response<Void> list(Pageable pageable, Authentication authentication) {
+        return null;
+    }
 }
