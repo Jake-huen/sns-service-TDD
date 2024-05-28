@@ -7,10 +7,10 @@ import com.heon.sns.controller.response.Response;
 import com.heon.sns.model.Post;
 import com.heon.sns.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.print.Pageable;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -38,7 +38,12 @@ public class PostController {
     }
 
     @GetMapping
-    public Response<Void> list(Pageable pageable, Authentication authentication) {
-        return null;
+    public Response<Page<PostResponse>> list(Pageable pageable) {
+        return Response.success(postService.list(pageable).map(PostResponse::fromPost));
+    }
+
+    @GetMapping("/my")
+    public Response<Page<PostResponse>> my(Pageable pageable, Authentication authentication) {
+        return Response.success(postService.my(authentication.getName(), pageable).map(PostResponse::fromPost));
     }
 }
