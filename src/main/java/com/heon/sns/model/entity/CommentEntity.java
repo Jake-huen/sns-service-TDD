@@ -11,9 +11,10 @@ import lombok.Setter;
         @Index(name = "user_id_idx", columnList = "user_id"),
         @Index(name = "post_id_idx", columnList = "post_id")
 })
-public class LikeEntity extends BaseTimeEntity {
+public class CommentEntity extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(name = "title")
@@ -30,10 +31,14 @@ public class LikeEntity extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private PostEntity post;
 
-    public static LikeEntity of(UserEntity userEntity, PostEntity postEntity) {
-        LikeEntity entity = new LikeEntity();
+    @Column(name = "comment")
+    private String comment;
+
+    public static CommentEntity of(UserEntity userEntity, PostEntity postEntity, String comment) {
+        CommentEntity entity = new CommentEntity();
         entity.setUser(userEntity);
         entity.setPost(postEntity);
+        entity.setComment(comment);
         return entity;
     }
 }

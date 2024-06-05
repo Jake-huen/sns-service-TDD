@@ -1,7 +1,9 @@
 package com.heon.sns.controller;
 
+import com.heon.sns.controller.request.PostCommentRequest;
 import com.heon.sns.controller.request.PostCreateRequest;
 import com.heon.sns.controller.request.PostModifyRequest;
+import com.heon.sns.controller.response.CommentResponse;
 import com.heon.sns.controller.response.PostResponse;
 import com.heon.sns.controller.response.Response;
 import com.heon.sns.model.Post;
@@ -56,5 +58,16 @@ public class PostController {
     @GetMapping("/{postId}/likes")
     public Response<Integer> likeCount(@PathVariable("postId") Integer postId, Authentication authentication) {
         return Response.success(postService.likeCount(postId));
+    }
+
+    @PostMapping("/{postId}/comments")
+    public Response<Void> comment(@PathVariable("postId") Integer postId, @RequestBody PostCommentRequest request, Authentication authentication) {
+        postService.comment(postId, authentication.getName(), request.getComment());
+        return Response.success();
+    }
+
+    @GetMapping("/{postId}/comments")
+    public Response<Page<CommentResponse>> comment(@PathVariable("postId") Integer postId, Pageable pageable, Authentication authentication) {
+        return Response.success(postService.getComments(postId, pageable).map(CommentResponse::fromComment));
     }
 }
