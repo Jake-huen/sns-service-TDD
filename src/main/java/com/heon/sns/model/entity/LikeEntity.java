@@ -13,14 +13,8 @@ import lombok.Setter;
 })
 public class LikeEntity extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(name = "title")
-    private String title;
-
-    @Column(name = "body", columnDefinition = "TEXT")
-    private String body;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

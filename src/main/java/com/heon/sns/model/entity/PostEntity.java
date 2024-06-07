@@ -7,12 +7,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(indexes = {
-        @Index(name = "user_id_idx", columnList = "user_id")
-})
+//@Table(indexes = {
+//        @Index(name = "user_id_idx", columnList = "user_id")
+//})
 public class PostEntity extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "title")

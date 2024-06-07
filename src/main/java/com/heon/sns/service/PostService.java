@@ -3,16 +3,12 @@ package com.heon.sns.service;
 
 import com.heon.sns.exception.ErrorCode;
 import com.heon.sns.exception.SnsApplicationException;
+import com.heon.sns.model.AlarmArgs;
+import com.heon.sns.model.AlarmType;
 import com.heon.sns.model.Comment;
 import com.heon.sns.model.Post;
-import com.heon.sns.model.entity.CommentEntity;
-import com.heon.sns.model.entity.LikeEntity;
-import com.heon.sns.model.entity.PostEntity;
-import com.heon.sns.model.entity.UserEntity;
-import com.heon.sns.repository.CommentEntityRepository;
-import com.heon.sns.repository.LikeEntityRepository;
-import com.heon.sns.repository.PostEntityRepository;
-import com.heon.sns.repository.UserEntityRepository;
+import com.heon.sns.model.entity.*;
+import com.heon.sns.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,6 +26,7 @@ public class PostService {
     private final PostEntityRepository postEntityRepository;
     private final UserEntityRepository userEntityRepository;
     private final LikeEntityRepository likeEntityRepository;
+    private final AlarmEntityRepository alarmEntityRepository;
     private final CommentEntityRepository commentEntityRepository;
 
     @Transactional
@@ -90,6 +87,8 @@ public class PostService {
         });
         // like save
         likeEntityRepository.save(LikeEntity.of(userEntity, postEntity));
+        // alarm save
+        alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
     }
 
     public int likeCount(Integer postId) {
@@ -105,6 +104,8 @@ public class PostService {
         UserEntity userEntity = getUserOrException(userName);
         // comment save
         commentEntityRepository.save(CommentEntity.of(userEntity, postEntity, comment));
+        // alarm save -> Post 작성한 사람한테 알람이 감
+        alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
     }
 
     public Page<Comment> getComments(Integer postId, Pageable pageable) {

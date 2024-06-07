@@ -2,13 +2,17 @@ package com.heon.sns.service;
 
 import com.heon.sns.exception.ErrorCode;
 import com.heon.sns.exception.SnsApplicationException;
+import com.heon.sns.model.Alarm;
 import com.heon.sns.model.User;
 import com.heon.sns.model.entity.UserEntity;
+import com.heon.sns.repository.AlarmEntityRepository;
 import com.heon.sns.repository.UserEntityRepository;
 import com.heon.sns.util.JwtTokenUtils;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +30,7 @@ public class UserService {
     private Long expiredTimeMs;
 
     private final UserEntityRepository userEntityRepository;
+    private final AlarmEntityRepository alarmEntityRepository;
     private final BCryptPasswordEncoder encoder;
 
     // UserDetailService 인터페이스를 상속받지 않고 직접 구현
@@ -59,5 +64,11 @@ public class UserService {
         String token = JwtTokenUtils.generateToken(userName, secretKey, expiredTimeMs);
 
         return token;
+    }
+
+    public Page<Alarm> alarmList(String userName, Pageable pageable) {
+        UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(() -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
+
+        return alarmEntityRepository.findAllByUser(userEntity, pageable).map(Alarm::fromEntity);
     }
 }

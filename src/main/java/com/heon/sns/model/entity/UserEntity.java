@@ -17,7 +17,7 @@ import java.time.Instant;
 @Table
 public class UserEntity extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "user_name")
