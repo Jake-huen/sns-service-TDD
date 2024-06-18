@@ -7,6 +7,7 @@ import com.heon.sns.controller.response.Response;
 import com.heon.sns.controller.response.UserJoinResponse;
 import com.heon.sns.controller.response.UserLoginResponse;
 import com.heon.sns.model.User;
+import com.heon.sns.model.entity.UserEntity;
 import com.heon.sns.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,9 @@ public class UserController {
 
     @GetMapping("/alarms")
     public Response<Page<AlarmResponse>> alarm(Pageable pageable, Authentication authentication) {
-        return Response.success(userService.alarmList(authentication.getName(), pageable).map(AlarmResponse::fromAlarm));
+        // 여기서 Authentication을 그냥 사용할 수도 있지만, 이미 Authentication에는 JWT Token으로 DB 조회를 한번 한, User 정보가 들어있다.
+        // service단에서 또 User DB를 조회하는 것은 중복이기 때문에 바로 User를 꺼내서 사용할 수 있다.
+        UserEntity user = (UserEntity) authentication.getPrincipal();
+        return Response.success(userService.alarmList(user.getId(), pageable).map(AlarmResponse::fromAlarm));
     }
 }

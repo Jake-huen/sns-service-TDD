@@ -66,9 +66,11 @@ public class UserService {
         return token;
     }
 
-    public Page<Alarm> alarmList(String userName, Pageable pageable) {
-        UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(() -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
+    public Page<Alarm> alarmList(Integer userId, Pageable pageable) {
+        // TODO : JWT TOKEN을 검증하면서 DB 조회를 한번 거쳤는데 또 DB 조회를 하고 있음.
+        // UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(() -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
 
-        return alarmEntityRepository.findAllByUser(userEntity, pageable).map(Alarm::fromEntity);
+        // 이 부분도 alarm을 User를 통해서 찾는데, 다른 것을 통해서 찾아도 되지 않을까?
+        return alarmEntityRepository.findAllByUser(userId, pageable).map(Alarm::fromEntity);
     }
 }

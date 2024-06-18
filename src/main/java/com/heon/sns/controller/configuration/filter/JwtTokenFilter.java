@@ -45,13 +45,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 return;
             }
 
+            // JWT Token에서 username을 가져옴.
             String username = JwtTokenUtils.getUserName(token, key);
+            // JWT Token에서 가져온 Username을 가지고 여기서 DB를 한번 조회함
             User user = userService.loadUserByUserName(username);
 
+            // User를 UsernamePasswordAuthenticationToken에다가 넣어준다.
+            // 여기서는 3가지 파라미터를 받고 있음(principal, credentials, authorities)
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     user, null, user.getAuthorities()
             );
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            // 만든 authentication을 context에 넣어주게 된다.
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (RuntimeException e) {
             filterChain.doFilter(request, response);
