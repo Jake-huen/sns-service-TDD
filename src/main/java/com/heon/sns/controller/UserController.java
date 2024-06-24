@@ -6,9 +6,12 @@ import com.heon.sns.controller.response.AlarmResponse;
 import com.heon.sns.controller.response.Response;
 import com.heon.sns.controller.response.UserJoinResponse;
 import com.heon.sns.controller.response.UserLoginResponse;
+import com.heon.sns.exception.ErrorCode;
+import com.heon.sns.exception.SnsApplicationException;
 import com.heon.sns.model.User;
 import com.heon.sns.model.entity.UserEntity;
 import com.heon.sns.service.UserService;
+import com.heon.sns.util.ClassUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +42,9 @@ public class UserController {
     public Response<Page<AlarmResponse>> alarm(Pageable pageable, Authentication authentication) {
         // 여기서 Authentication을 그냥 사용할 수도 있지만, 이미 Authentication에는 JWT Token으로 DB 조회를 한번 한, User 정보가 들어있다.
         // service단에서 또 User DB를 조회하는 것은 중복이기 때문에 바로 User를 꺼내서 사용할 수 있다.
-        UserEntity user = (UserEntity) authentication.getPrincipal();
+        // UserEntity user = (UserEntity) authentication.getPrincipal();
+        UserEntity user = ClassUtils.getSafeCaseInstance(authentication.getPrincipal(), UserEntity.class)
+                .orElseThrow(() -> new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserEntity Class Failed"));
         return Response.success(userService.alarmList(user.getId(), pageable).map(AlarmResponse::fromAlarm));
     }
 }
