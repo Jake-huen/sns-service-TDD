@@ -71,6 +71,6 @@ public class UserService {
         // UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(() -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
 
         // 이 부분도 alarm을 User를 통해서 찾는데, 다른 것을 통해서 찾아도 되지 않을까?
-        return alarmEntityRepository.findAllByUser(userId, pageable).map(Alarm::fromEntity);
+        return alarmEntityRepository.findAllByUserId(userId, pageable).map(Alarm::fromEntity);
     }
 }

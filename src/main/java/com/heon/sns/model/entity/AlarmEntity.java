@@ -5,10 +5,13 @@ import com.heon.sns.model.AlarmType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 
+
+@Slf4j
 @Getter
 @Setter
 @Entity
@@ -22,7 +25,7 @@ public class AlarmEntity extends BaseTimeEntity {
     private Integer id;
 
     // 알람을 받은 사람
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
