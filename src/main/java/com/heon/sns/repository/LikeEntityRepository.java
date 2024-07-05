@@ -20,4 +20,6 @@ public interface LikeEntityRepository extends JpaRepository<LikeEntity, Integer>
     long countByPost(PostEntity post);
 
     List<LikeEntity> findAllByPost(PostEntity post);
+
+    void deleteAllByPost(PostEntity postEntity);
 }
