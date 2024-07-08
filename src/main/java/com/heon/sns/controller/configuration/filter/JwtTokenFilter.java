@@ -48,6 +48,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             // JWT Token에서 username을 가져옴.
             String username = JwtTokenUtils.getUserName(token, key);
             // JWT Token에서 가져온 Username을 가지고 여기서 DB를 한번 조회함
+            // 이 부분을 캐시를 통해서 가지고 오도록 변경하겠습니다.
             User user = userService.loadUserByUserName(username);
 
             // User를 UsernamePasswordAuthenticationToken에다가 넣어준다.

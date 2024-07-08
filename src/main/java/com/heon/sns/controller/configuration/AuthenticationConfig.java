@@ -28,14 +28,13 @@ public class AuthenticationConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers("^(?!/api/).*");
+        return web -> web.ignoring().requestMatchers("^(?!/api/).*").requestMatchers("/api/*/users/join", "/api/*/users/login");
     }
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/api/*/users/join", "/api/*/users/login").permitAll()
                         .requestMatchers("/api/**").authenticated()
                 )
                 .sessionManagement((session) -> session
