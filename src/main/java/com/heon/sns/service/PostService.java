@@ -28,6 +28,7 @@ public class PostService {
     private final LikeEntityRepository likeEntityRepository;
     private final AlarmEntityRepository alarmEntityRepository;
     private final CommentEntityRepository commentEntityRepository;
+    private final AlarmService alarmService;
 
     @Transactional
     public void create(String title, String body, String userName) {
@@ -65,8 +66,6 @@ public class PostService {
         likeEntityRepository.deleteAllByPost(postEntity);
         commentEntityRepository.deleteAllByPost(postEntity);
         postEntityRepository.delete(postEntity);
-
-
     }
 
     public Page<Post> list(Pageable pageable) {
@@ -109,6 +108,7 @@ public class PostService {
         commentEntityRepository.save(CommentEntity.of(userEntity, postEntity, comment));
         // alarm save -> Post 작성한 사람한테 알람이 감
         alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
+        alarmService.send();
     }
 
     public Page<Comment> getComments(Integer postId, Pageable pageable) {

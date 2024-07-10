@@ -16,6 +16,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table
+@NoArgsConstructor
 public class UserEntity extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
